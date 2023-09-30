@@ -44,7 +44,7 @@ use crate::{
     gpio::Pin,
     gpio::{
         bank0::{Gpio26, Gpio27, Gpio28, Gpio29},
-        FloatingInput,
+        FloatingInput, PullDownInput, PullUpInput,
     },
     resets::SubsystemReset,
 };
@@ -97,6 +97,20 @@ impl Adc {
 macro_rules! channel {
     ($pin:ident, $channel:expr) => {
         impl Channel<Adc> for Pin<$pin, FloatingInput> {
+            type ID = u8; // ADC channels are identified numerically
+
+            fn channel() -> u8 {
+                $channel
+            }
+        }
+        impl Channel<Adc> for Pin<$pin, PullUpInput> {
+            type ID = u8; // ADC channels are identified numerically
+
+            fn channel() -> u8 {
+                $channel
+            }
+        }
+        impl Channel<Adc> for Pin<$pin, PullDownInput> {
             type ID = u8; // ADC channels are identified numerically
 
             fn channel() -> u8 {
